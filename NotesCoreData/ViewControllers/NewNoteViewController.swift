@@ -13,6 +13,7 @@ class NewNoteViewController: UIViewController {
     
     var managedObjectContext: NSManagedObjectContext?
     
+    //--------------------------------------------------------------//
     convenience init(_ context: NSManagedObjectContext) {
         self.init(nibName: nil, bundle: nil)
         self.managedObjectContext = context
@@ -33,6 +34,8 @@ class NewNoteViewController: UIViewController {
         contentTextField.frame = contentTextFieldFrame
     }
     
+    //--------------------------------------------------------------//
+    // MARK: - Properties
     private lazy var titleTextField: UITextField = {
         var textField: UITextField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
@@ -67,24 +70,23 @@ class NewNoteViewController: UIViewController {
         return frame
     }
     
+    //--------------------------------------------------------------//
     /// Save new `Note` with CoreData and pop the root view
-    @objc func saveNote() {
+    @objc private func saveNote() {
         print("saveNote")
         guard let context = managedObjectContext else { return }
         guard let title = titleTextField.text, !title.isEmpty else {
             showAlert(with: "Title Missing", and: "Please put the title")
             return
         }
-        
         // Create the Note
         let note: Note = Note(context: context)
         note.createdAt = Date()
         note.updatedAt = Date()
         note.title = titleTextField.text
         note.contents = contentTextField.text
-        
         // Pop the previous View controller with all the notes
-        _ = navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
 }
 

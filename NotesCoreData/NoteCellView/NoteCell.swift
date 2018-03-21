@@ -10,13 +10,9 @@ import UIKit
 
 class NoteCell: UITableViewCell {
     
+    // MARK: - Properties
     static let id: String = "NoteCellID"
     var note: Note!
-    
-    convenience init(note: Note) {
-        self.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "NoteCellID")
-        self.note = note
-    }
     
     lazy var titleLabel: UILabel = {
         var label: UILabel = UILabel()
@@ -42,6 +38,27 @@ class NoteCell: UITableViewCell {
         return label
     }()
     
+    //--------------------------------------------------------------//
+    
+    convenience init(note: Note) {
+        self.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "NoteCellID")
+        self.note = note
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentLabel.frame = contentLabelFrame
+        titleLabel.frame = titleLabelFrame
+        updatedAtLabel.frame = updatedAtLabelFrame
+        self.addSubview(titleLabel)
+        self.addSubview(contentLabel)
+        self.addSubview(updatedAtLabel)
+        self.backgroundColor = UIColor.cyan
+    }
+    
+    //--------------------------------------------------------------//
+    // MARK: - Private Properties
     private let offsetX: CGFloat = 5
     private let offsetY: CGFloat = 5
     private let ratioTitleVSDate: CGFloat = 1 / 3
@@ -66,19 +83,5 @@ class NoteCell: UITableViewCell {
         frame.origin.y = frame.height + offsetY
         return frame
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        contentLabel.frame = contentLabelFrame
-        titleLabel.frame = titleLabelFrame
-        updatedAtLabel.frame = updatedAtLabelFrame
-        self.addSubview(titleLabel)
-        self.addSubview(contentLabel)
-        self.addSubview(updatedAtLabel)
-        self.backgroundColor = UIColor.cyan
-    
-    }
-    
 }
 

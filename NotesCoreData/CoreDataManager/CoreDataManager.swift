@@ -10,9 +10,6 @@ import CoreData
 
 final class CoreDataManager {
     
-    // Mark: - Properties
-    private let modelName: String
-    
     // Mark: - Initializatioт
     init(modelName: String) {
         self.modelName = modelName
@@ -20,8 +17,12 @@ final class CoreDataManager {
         setupNotigicationHandling()
     }
     
+    //--------------------------------------------------------------//
+    // Mark: - Private Properties
+    private let modelName: String
+    
     // To set up Core Data we need to initiate 3 objects:
-    // Managed Object Context
+    // - Managed Object Context
     private(set) lazy var managedObjectContext: NSManagedObjectContext = {
         let managedObjectContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         // Every parent Managed Object Context keeps a reference to
@@ -31,7 +32,7 @@ final class CoreDataManager {
         return managedObjectContext
     }()
     
-    // Managed Object Model
+    // - Managed Object Model
     private lazy var managedObjectModel: NSManagedObjectModel = {
         guard let modelURL = Bundle.main.url(forResource: self.modelName, withExtension: "momd") else {
             fatalError("Unable to find Data Model")
@@ -42,7 +43,7 @@ final class CoreDataManager {
         return managedObjectModel
     }()
     
-    // Persistent Store Coordinator
+    // - Persistent Store Coordinator
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         // Helpers
@@ -65,26 +66,27 @@ final class CoreDataManager {
         return persistentStoreCoordinator
     }()
     
+    //--------------------------------------------------------------//
+    // Mark - Private Functions
     private func setupNotigicationHandling() {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(saveChanges(_:)), name: Notification.Name.UIApplicationWillTerminate, object: nil)
         notificationCenter.addObserver(self, selector: #selector(saveChanges(_:)), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
     }
     
-    @objc private func saveChanges(_ notification: Notification) {
-        let notificationString: String = notification.description
-        print(notificationString)
-        saveChanges()
-    }
-    
     private func saveChanges() {
         guard managedObjectContext.hasChanges else { return }
-        
         do {
             try managedObjectContext.save()
         } catch {
             print("Unable to Save Managed Object Context")
             print("\(error), \(error.localizedDescription)")
         }
+    }
+    
+    @objc private func saveChanges(_ notification: Notification) {
+        let notificationString: String = notification.description
+        print(notificationString)
+        saveChanges()
     }
 }

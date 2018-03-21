@@ -13,10 +13,8 @@ class NotesViewController: UITableViewController {
 
     // MARK: - Properties
     var context: NSManagedObjectContext!
-    private var notes: [Note]? {
-        didSet { showTableView() }
-    }
 
+    //--------------------------------------------------------------//
     convenience init(_ manager: CoreDataManager) {
         self.init(nibName: nil, bundle: nil)
         self.context = manager.managedObjectContext
@@ -35,8 +33,14 @@ class NotesViewController: UITableViewController {
         fetchNotes()
     }
     
-    // Private Functions
+    //--------------------------------------------------------------//
+    // MARK: - Private Properties
+    private var notes: [Note]? {
+        didSet { showTableView() }
+    }
     
+    //--------------------------------------------------------------//
+    // MARK: - Private functions
     private func showTableView() {
         tableView.isHidden = (notes == nil)
     }
@@ -81,6 +85,9 @@ class NotesViewController: UITableViewController {
     }
     
 }
+
+//--------------------------------------------------------------//
+// Extensions
 
 // MARK: - Table View DataSource
 extension NotesViewController {
