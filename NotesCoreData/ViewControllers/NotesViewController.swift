@@ -86,6 +86,8 @@ class NotesViewController: UITableViewController {
         // managed object context the object is interested in
     }
     
+    // Updating the notes array according to changes made in the
+    // managed object context and updating UI
     @objc private func managedObjectContextObjectsDidChange(_ notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         
@@ -120,7 +122,8 @@ class NotesViewController: UITableViewController {
         }
         
         if notesDidChange {
-            //notes?.sort(by: { $0.updatedAt > $1.updatedAt })
+            // FIX IT: - dates format and !
+            notes?.sort(by: { $0.updatedAt! > $1.updatedAt! })
             tableView.reloadData()
             updateUI()
         }
@@ -130,7 +133,7 @@ class NotesViewController: UITableViewController {
     /// Push the NewNoteViewController with reference to managedObjectContext
     @objc private func addButtonTapped(_ bar: UIBarButtonItem) {
         guard context != nil else { return }
-        navigationController?.pushViewController(AddNewNoteViewController(context), animated: true)
+        navigationController?.pushViewController(AddNoteViewController(context), animated: true)
     }
     
 }
@@ -171,6 +174,13 @@ extension NotesViewController {
         note.managedObjectContext?.delete(note)
         // Deleting the note from the Core Data Manager context (which is here the same)
         //context.delete(note)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let note = notes?[indexPath.row] else {
+            fatalError("Unexpected Index Path for Note")
+        }
+        navigationController?.pushViewController(EditNoteViewController(note), animated: true)
     }
 }
 

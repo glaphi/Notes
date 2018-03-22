@@ -7,17 +7,8 @@
 //
 
 import UIKit
-import CoreData
 
-class AddNewNoteViewController: UIViewController {
-    
-    var managedObjectContext: NSManagedObjectContext?
-    
-    //--------------------------------------------------------------//
-    convenience init(_ context: NSManagedObjectContext) {
-        self.init(nibName: nil, bundle: nil)
-        self.managedObjectContext = context
-    }
+class NoteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,18 +16,24 @@ class AddNewNoteViewController: UIViewController {
         view.backgroundColor = UIColor.white
         view.addSubview(titleTextField)
         view.addSubview(contentTextField)
-        title = String.newNoteViewControllerTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveNote))
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
         titleTextField.frame = titleTextFieldFrame
         contentTextField.frame = contentTextFieldFrame
     }
     
+    @objc func saveNote() {
+        // Pop the previous View controller with all the notes
+        navigationController?.popViewController(animated: true)
+    }
+    
     //--------------------------------------------------------------//
     // MARK: - Properties
-    private lazy var titleTextField: UITextField = {
+    lazy var titleTextField: UITextField = {
         var textField: UITextField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
         textField.layer.borderWidth = 2
@@ -45,7 +42,7 @@ class AddNewNoteViewController: UIViewController {
         return textField
     }()
     
-    private lazy var contentTextField: UITextField = {
+    lazy var contentTextField: UITextField = {
         var textField: UITextField = UITextField()
         textField.textAlignment = .left
         textField.contentVerticalAlignment = .top
@@ -68,25 +65,6 @@ class AddNewNoteViewController: UIViewController {
         let height: CGFloat = view.bounds.height - frame.height
         frame.size.height = height
         return frame
-    }
-    
-    //--------------------------------------------------------------//
-    /// Save new `Note` with CoreData and pop the root view
-    @objc private func saveNote() {
-        print("saveNote")
-        guard let context = managedObjectContext else { return }
-        guard let title = titleTextField.text, !title.isEmpty else {
-            showAlert(with: "Title Missing", and: "Please put the title")
-            return
-        }
-        // Create the Note
-        let note: Note = Note(context: context)
-        note.createdAt = Date()
-        note.updatedAt = Date()
-        note.title = titleTextField.text
-        note.contents = contentTextField.text
-        // Pop the previous View controller with all the notes
-        navigationController?.popViewController(animated: true)
     }
 }
 

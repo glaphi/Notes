@@ -8,20 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		FA1C069A2057F5DE009C58D7 /* Notes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA1C06982057F5DE009C58D7 /* Notes.xcdatamodeld */; };
+		FA5093BE2063E7530022326B /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5093BD2063E7530022326B /* AddNoteViewController.swift */; };
 		FA5877452057D53200F67F61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5877442057D53200F67F61 /* AppDelegate.swift */; };
 		FA5877472057D53200F67F61 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5877462057D53200F67F61 /* NotesViewController.swift */; };
 		FA58774C2057D53200F67F61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA58774B2057D53200F67F61 /* Assets.xcassets */; };
 		FA58774F2057D53200F67F61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA58774D2057D53200F67F61 /* LaunchScreen.storyboard */; };
 		FA58775C2057D77B00F67F61 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA58775B2057D77B00F67F61 /* CoreDataManager.swift */; };
 		FA88FE5D205FE72100477BEB /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5C205FE72100477BEB /* NoteCell.swift */; };
-		FA88FE5F205FE78E00477BEB /* AddNewNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */; };
+		FA88FE5F205FE78E00477BEB /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5E205FE78E00477BEB /* NoteViewController.swift */; };
 		FA88FE61205FE7CE00477BEB /* TypesHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE60205FE7CE00477BEB /* TypesHelpers.swift */; };
+		FAAF7D2B2063E9300059F0AB /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAF7D2A2063E9300059F0AB /* EditNoteViewController.swift */; };
 		FAD863B8206007460051A501 /* ViewsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD863B7206007460051A501 /* ViewsHelpers.swift */; };
 		FAD863BB206024140051A501 /* Tutorial comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD863BA206024140051A501 /* Tutorial comments.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FA1C06992057F5DE009C58D7 /* Notes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Notes.xcdatamodel; sourceTree = "<group>"; };
+		FA5093BD2063E7530022326B /* AddNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		FA5877412057D53200F67F61 /* NotesCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotesCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5877442057D53200F67F61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA5877462057D53200F67F61 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
@@ -30,8 +33,9 @@
 		FA5877502057D53200F67F61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA58775B2057D77B00F67F61 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		FA88FE5C205FE72100477BEB /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
-		FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewNoteViewController.swift; sourceTree = "<group>"; };
+		FA88FE5E205FE78E00477BEB /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		FA88FE60205FE7CE00477BEB /* TypesHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypesHelpers.swift; sourceTree = "<group>"; };
+		FAAF7D2A2063E9300059F0AB /* EditNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		FAD863B7206007460051A501 /* ViewsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsHelpers.swift; sourceTree = "<group>"; };
 		FAD863BA206024140051A501 /* Tutorial comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Tutorial comments.swift"; path = "../ViewControllers/Tutorial comments.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,7 +93,9 @@
 			isa = PBXGroup;
 			children = (
 				FA5877462057D53200F67F61 /* NotesViewController.swift */,
-				FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */,
+				FA88FE5E205FE78E00477BEB /* NoteViewController.swift */,
+				FAAF7D2A2063E9300059F0AB /* EditNoteViewController.swift */,
+				FA5093BD2063E7530022326B /* AddNoteViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -205,11 +211,13 @@
 				FA88FE61205FE7CE00477BEB /* TypesHelpers.swift in Sources */,
 				FA5877472057D53200F67F61 /* NotesViewController.swift in Sources */,
 				FA88FE5D205FE72100477BEB /* NoteCell.swift in Sources */,
+				FAAF7D2B2063E9300059F0AB /* EditNoteViewController.swift in Sources */,
 				FA5877452057D53200F67F61 /* AppDelegate.swift in Sources */,
 				FA1C069A2057F5DE009C58D7 /* Notes.xcdatamodeld in Sources */,
 				FAD863BB206024140051A501 /* Tutorial comments.swift in Sources */,
 				FAD863B8206007460051A501 /* ViewsHelpers.swift in Sources */,
-				FA88FE5F205FE78E00477BEB /* AddNewNoteViewController.swift in Sources */,
+				FA5093BE2063E7530022326B /* AddNoteViewController.swift in Sources */,
+				FA88FE5F205FE78E00477BEB /* NoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

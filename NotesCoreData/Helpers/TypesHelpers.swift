@@ -11,6 +11,7 @@ import Foundation
 extension String {
     static let notesViewControllerTitle: String = "Notes"
     static let newNoteViewControllerTitle: String = "New Note"
+    static let editNoteViewControllerTitle: String = "Edit Note"
 }
 
 extension Note {

@@ -18,7 +18,6 @@ class NoteCell: UITableViewCell {
         var label: UILabel = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .left
-        label.text = "Title"
         return label
     }()
     
@@ -27,7 +26,6 @@ class NoteCell: UITableViewCell {
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor.lightGray
-        label.text = "Content content content content content content content content content content content content"
         return label
     }()
     
