@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class NewNoteViewController: UIViewController {
+class AddNewNoteViewController: UIViewController {
     
     var managedObjectContext: NSManagedObjectContext?
     

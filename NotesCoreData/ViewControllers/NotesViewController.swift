@@ -25,6 +25,7 @@ class NotesViewController: UITableViewController {
         //View Setup
         viewSetup()
         configureTableView()
+        notificationHandlingSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,12 +37,12 @@ class NotesViewController: UITableViewController {
     //--------------------------------------------------------------//
     // MARK: - Private Properties
     private var notes: [Note]? {
-        didSet { showTableView() }
+        didSet { updateUI() }
     }
     
     //--------------------------------------------------------------//
     // MARK: - Private functions
-    private func showTableView() {
+    private func updateUI() {
         tableView.isHidden = (notes == nil)
     }
     
@@ -78,10 +79,58 @@ class NotesViewController: UITableViewController {
         tableView.register(NoteCell.self, forCellReuseIdentifier: NoteCell.id)
     }
     
+    private func notificationHandlingSetup() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: context)
+        // If we had more contexts, it should only observe the
+        // managed object context the object is interested in
+    }
+    
+    @objc private func managedObjectContextObjectsDidChange(_ notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        
+        var notesDidChange = false
+        
+        if let inserts = userInfo[NSInsertedObjectsKey] as? Set<NSManagedObject> {
+            for insert in inserts {
+                if let note = insert as? Note {
+                    notes?.append(note)
+                    notesDidChange = true
+                }
+            }
+        }
+        
+        if let updates = userInfo[NSUpdatedObjectsKey] as? Set<NSManagedObject> {
+            for update in updates {
+                if let _ = update as? Note {
+                    notesDidChange = true
+                }
+            }
+        }
+        
+        if let deletes = userInfo[NSDeletedObjectsKey] as? Set<NSManagedObject> {
+            for delete in deletes {
+                if let note = delete as? Note {
+                    if let index = notes?.index(of: note){
+                        notes?.remove(at: index)
+                        notesDidChange = true
+                    }
+                }
+            }
+        }
+        
+        if notesDidChange {
+            //notes?.sort(by: { $0.updatedAt > $1.updatedAt })
+            tableView.reloadData()
+            updateUI()
+        }
+
+    }
+    
     /// Push the NewNoteViewController with reference to managedObjectContext
     @objc private func addButtonTapped(_ bar: UIBarButtonItem) {
         guard context != nil else { return }
-        navigationController?.pushViewController(NewNoteViewController(context), animated: true)
+        navigationController?.pushViewController(AddNewNoteViewController(context), animated: true)
     }
     
 }
@@ -111,6 +160,17 @@ extension NotesViewController {
         cell.contentLabel.text = note.contents
         cell.updatedAtLabel.text = note.updatedAt?.description
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        guard let note = notes?[indexPath.row] else {
+            fatalError("Unexpected Index Path for Note")
+        }
+        // Deleting the note from the Managed Object Context to which it belongs
+        note.managedObjectContext?.delete(note)
+        // Deleting the note from the Core Data Manager context (which is here the same)
+        //context.delete(note)
     }
 }
 

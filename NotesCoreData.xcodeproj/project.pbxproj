@@ -14,7 +14,7 @@
 		FA58774F2057D53200F67F61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA58774D2057D53200F67F61 /* LaunchScreen.storyboard */; };
 		FA58775C2057D77B00F67F61 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA58775B2057D77B00F67F61 /* CoreDataManager.swift */; };
 		FA88FE5D205FE72100477BEB /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5C205FE72100477BEB /* NoteCell.swift */; };
-		FA88FE5F205FE78E00477BEB /* NewNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5E205FE78E00477BEB /* NewNoteViewController.swift */; };
+		FA88FE5F205FE78E00477BEB /* AddNewNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */; };
 		FA88FE61205FE7CE00477BEB /* TypesHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88FE60205FE7CE00477BEB /* TypesHelpers.swift */; };
 		FAD863B8206007460051A501 /* ViewsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD863B7206007460051A501 /* ViewsHelpers.swift */; };
 		FAD863BB206024140051A501 /* Tutorial comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD863BA206024140051A501 /* Tutorial comments.swift */; };
@@ -30,7 +30,7 @@
 		FA5877502057D53200F67F61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA58775B2057D77B00F67F61 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		FA88FE5C205FE72100477BEB /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
-		FA88FE5E205FE78E00477BEB /* NewNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNoteViewController.swift; sourceTree = "<group>"; };
+		FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewNoteViewController.swift; sourceTree = "<group>"; };
 		FA88FE60205FE7CE00477BEB /* TypesHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypesHelpers.swift; sourceTree = "<group>"; };
 		FAD863B7206007460051A501 /* ViewsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsHelpers.swift; sourceTree = "<group>"; };
 		FAD863BA206024140051A501 /* Tutorial comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Tutorial comments.swift"; path = "../ViewControllers/Tutorial comments.swift"; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				FA5877462057D53200F67F61 /* NotesViewController.swift */,
-				FA88FE5E205FE78E00477BEB /* NewNoteViewController.swift */,
+				FA88FE5E205FE78E00477BEB /* AddNewNoteViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -209,7 +209,7 @@
 				FA1C069A2057F5DE009C58D7 /* Notes.xcdatamodeld in Sources */,
 				FAD863BB206024140051A501 /* Tutorial comments.swift in Sources */,
 				FAD863B8206007460051A501 /* ViewsHelpers.swift in Sources */,
-				FA88FE5F205FE78E00477BEB /* NewNoteViewController.swift in Sources */,
+				FA88FE5F205FE78E00477BEB /* AddNewNoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
