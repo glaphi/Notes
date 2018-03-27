@@ -11,14 +11,11 @@ import CoreData
 
 class AddNoteViewController: NoteViewController {
     
-    var managedObjectContext: NSManagedObjectContext?
-    
-    //--------------------------------------------------------------//
-    convenience init(_ context: NSManagedObjectContext) {
-        self.init(nibName: nil, bundle: nil)
-        self.managedObjectContext = context
+    var context: NSManagedObjectContext {
+        return CoreDataManager.shared.managedObjectContext
     }
     
+    //--------------------------------------------------------------//
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,7 +27,6 @@ class AddNoteViewController: NoteViewController {
     /// Save new `Note` with CoreData and pop the root view
     @objc internal override func saveNote() {
         print("saveNote")
-        guard let context = managedObjectContext else { return }
         guard let title = titleTextField.text, !title.isEmpty else {
             showAlert(with: "Title Missing", and: "Please put the title")
             return

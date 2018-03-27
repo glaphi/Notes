@@ -12,14 +12,11 @@ import CoreData
 class NotesViewController: UITableViewController {
 
     // MARK: - Properties
-    var context: NSManagedObjectContext!
+    var context: NSManagedObjectContext {
+        return CoreDataManager.shared.managedObjectContext
+    }
 
     //--------------------------------------------------------------//
-    convenience init(_ manager: CoreDataManager) {
-        self.init(nibName: nil, bundle: nil)
-        self.context = manager.managedObjectContext
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //View Setup
@@ -131,9 +128,7 @@ class NotesViewController: UITableViewController {
     }
     
     /// Push the NewNoteViewController with reference to managedObjectContext
-    @objc private func addButtonTapped(_ bar: UIBarButtonItem) {
-        guard context != nil else { return }
-        navigationController?.pushViewController(AddNoteViewController(context), animated: true)
+    @objc private func addButtonTapped(_ bar: UIBarButtonItem) {        navigationController?.pushViewController(AddNoteViewController(), animated: true)
     }
     
 }

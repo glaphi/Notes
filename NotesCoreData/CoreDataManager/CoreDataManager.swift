@@ -10,8 +10,10 @@ import CoreData
 
 final class CoreDataManager {
     
-    // Mark: - Initializatioт
-    init(modelName: String) {
+    static let shared = CoreDataManager(modelName: "Notes")
+
+    // Mark: - Initialisation
+    private init(modelName: String) {
         self.modelName = modelName
         
         setupNotigicationHandling()

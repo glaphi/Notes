@@ -59,10 +59,9 @@ class NoteCell: UITableViewCell {
     // MARK: - Private Properties
     private let offsetX: CGFloat = 5
     private let offsetY: CGFloat = 5
-    private let ratioTitleVSDate: CGFloat = 1 / 3
     
     private var titleLabelFrame: CGRect {
-        let width: CGFloat = (bounds.width - 2 * offsetX) * 2 * ratioTitleVSDate
+        let width: CGFloat = (bounds.width - 2 * offsetX) * 2/3
         let height: CGFloat = bounds.height / 2
         let frame = CGRect(x: offsetX, y: offsetY, width: width, height: height)
         return frame
