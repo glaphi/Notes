@@ -15,7 +15,6 @@ final class CoreDataManager {
     // Mark: - Initialisation
     private init(modelName: String) {
         self.modelName = modelName
-        
         setupNotigicationHandling()
     }
     

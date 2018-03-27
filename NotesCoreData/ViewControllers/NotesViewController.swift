@@ -9,56 +9,60 @@
 import UIKit
 import CoreData
 
-class NotesViewController: UITableViewController {
+class NotesViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
-    // MARK: - Properties
-    var context: NSManagedObjectContext {
-        return CoreDataManager.shared.managedObjectContext
-    }
-
-    //--------------------------------------------------------------//
     override func viewDidLoad() {
         super.viewDidLoad()
         //View Setup
         viewSetup()
         configureTableView()
-        notificationHandlingSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Fetch notes from the persistent store
         fetchNotes()
+        updateUI()
     }
     
     //--------------------------------------------------------------//
     // MARK: - Private Properties
-    private var notes: [Note]? {
-        didSet { updateUI() }
+    private var context: NSManagedObjectContext {
+        return CoreDataManager.shared.managedObjectContext
     }
     
+    private lazy var fetchedResultsController: NSFetchedResultsController<Note> = {
+        let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Note.updatedAt), ascending: false)]
+        
+        let fetchedRequestController: NSFetchedResultsController<Note> = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedRequestController.delegate = self
+        
+        return fetchedRequestController
+    }()
+    
+    private var hasNotes: Bool {
+        guard let fetchedObjects: [Note] = fetchedResultsController.fetchedObjects else {
+            return false
+        }
+        return fetchedObjects.count > 0
+    }
     //--------------------------------------------------------------//
     // MARK: - Private functions
     private func updateUI() {
-        tableView.isHidden = (notes == nil)
+        if !hasNotes {
+            view.backgroundColor = UIColor.gray
+            tableView.isHidden = true
+        }
     }
     
     /// Fetching the notes from the persistent store
     private func fetchNotes() {
-        let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
-        // Sorting the fetch notes by the updated date
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Note.updatedAt), ascending: false)]
-        
-        context.performAndWait {
-            do {
-                let notes = try fetchRequest.execute()
-                self.notes = notes
-                self.tableView.reloadData()
-            } catch {
-                let fetchError = error as NSError
-                print("Unable to Execute Fetch Request: ")
-                print("\(fetchRequest), \(fetchError.localizedDescription)")
-            }
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            print("Unable to Perform Fetch Request")
+            print("\(error), \(error.localizedDescription)")
         }
     }
     
@@ -76,55 +80,12 @@ class NotesViewController: UITableViewController {
         tableView.register(NoteCell.self, forCellReuseIdentifier: NoteCell.id)
     }
     
-    private func notificationHandlingSetup() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: context)
-        // If we had more contexts, it should only observe the
-        // managed object context the object is interested in
-    }
-    
-    // Updating the notes array according to changes made in the
-    // managed object context and updating UI
-    @objc private func managedObjectContextObjectsDidChange(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else { return }
-        
-        var notesDidChange = false
-        
-        if let inserts = userInfo[NSInsertedObjectsKey] as? Set<NSManagedObject> {
-            for insert in inserts {
-                if let note = insert as? Note {
-                    notes?.append(note)
-                    notesDidChange = true
-                }
-            }
-        }
-        
-        if let updates = userInfo[NSUpdatedObjectsKey] as? Set<NSManagedObject> {
-            for update in updates {
-                if let _ = update as? Note {
-                    notesDidChange = true
-                }
-            }
-        }
-        
-        if let deletes = userInfo[NSDeletedObjectsKey] as? Set<NSManagedObject> {
-            for delete in deletes {
-                if let note = delete as? Note {
-                    if let index = notes?.index(of: note){
-                        notes?.remove(at: index)
-                        notesDidChange = true
-                    }
-                }
-            }
-        }
-        
-        if notesDidChange {
-            // FIX IT: - dates format and !
-            notes?.sort(by: { $0.updatedAt! > $1.updatedAt! })
-            tableView.reloadData()
-            updateUI()
-        }
-
+    /// Helper method to configure cell's attribures in table view
+    func configure(_ cell: NoteCell, at indexPath: IndexPath) {
+        let note: Note = fetchedResultsController.object(at: indexPath)
+        cell.titleLabel.text = note.title
+        cell.contentLabel.text = note.contents
+        cell.updatedAtLabel.text = note.updatedAt?.description
     }
     
     /// Push the NewNoteViewController with reference to managedObjectContext
@@ -139,42 +100,39 @@ class NotesViewController: UITableViewController {
 // MARK: - Table View DataSource
 extension NotesViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return (notes != nil) ? 1 : 0
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes?.count ?? 0
+        guard let section = fetchedResultsController.sections?[section] else {
+            return 0
+        }
+        return section.numberOfObjects
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Getting the notes
-        guard let note: Note = notes?[indexPath.row] else {
-            fatalError("Unexpected Index Path for Note")
-        }
         guard let cell =  tableView.dequeueReusableCell(withIdentifier: NoteCell.id, for: indexPath) as? NoteCell else {
             fatalError("Unexpected Index Path for Cell")
         }
-        cell.titleLabel.text = note.title
-        cell.contentLabel.text = note.contents
-        cell.updatedAtLabel.text = note.updatedAt?.description
+        configure(cell, at: indexPath)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        guard let note = notes?[indexPath.row] else {
-            fatalError("Unexpected Index Path for Note")
-        }
+        let note: Note = fetchedResultsController.object(at: indexPath)
         // Deleting the note from the Managed Object Context to which it belongs
-        note.managedObjectContext?.delete(note)
+        //note.managedObjectContext?.delete(note)
         // Deleting the note from the Core Data Manager context (which is here the same)
-        //context.delete(note)
+        context.delete(note)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let note = notes?[indexPath.row] else {
-            fatalError("Unexpected Index Path for Note")
-        }
+        let note: Note = fetchedResultsController.object(at: indexPath)
         navigationController?.pushViewController(EditNoteViewController(note), animated: true)
     }
 }
@@ -185,3 +143,37 @@ extension NotesViewController {
     }
 }
 
+// MARK: - NS Fetched Results Controller Delegate
+extension NotesViewController {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // inform table view about upcoming updates
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // inform table view we finished sending updates
+        tableView.endUpdates()
+        updateUI()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        // NSFetchedResultsChangeType can be insert, delete, update, move
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+        case .update:
+            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? NoteCell {
+                configure(cell, at: indexPath)
+            }
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        case .move:
+            return
+        }
+    }
+}

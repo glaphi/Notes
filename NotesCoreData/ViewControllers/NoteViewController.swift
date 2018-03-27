@@ -8,9 +8,11 @@
 
 import UIKit
 
-class NoteViewController: UIViewController {
+/// Superclass with the basic views for representing the note
+/// for other classes to subclass
+open class NoteViewController: UIViewController {
     
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
@@ -19,7 +21,7 @@ class NoteViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveNote))
     }
     
-    override func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         titleTextField.frame = titleTextFieldFrame
