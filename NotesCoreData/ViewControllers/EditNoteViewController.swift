@@ -6,7 +6,7 @@
 //  Copyright © 2018 Glaphi. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class EditNoteViewController: NoteViewController {
     

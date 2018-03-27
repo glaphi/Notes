@@ -6,7 +6,6 @@
 //  Copyright © 2018 Glaphi. All rights reserved.
 //
 
-import UIKit
 import CoreData
 
 class AddNoteViewController: NoteViewController {
@@ -20,7 +19,6 @@ class AddNoteViewController: NoteViewController {
         super.viewDidLoad()
         
         title = String.newNoteViewControllerTitle
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveNote))
     }
 
     //--------------------------------------------------------------//
